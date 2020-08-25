@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>The Blue Eyes Red Monster</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@uhyo_" />
+    <meta property="og:title" content="The Blue Eyes Red Monster" />
+    <!-- <meta
+      property="og:image"
+      content="https://type-puzzles.uhyohyo.net/og-image.png"
+    /> -->
+    <link rel="icon" href="/og-image.png" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/ress@3.0.0/dist/ress.min.css"
+    />
+    <% if(htmlWebpackPlugin.options.local.ga) { %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.local.ga.id %>"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "<%= htmlWebpackPlugin.options.local.ga.id %>");
+    </script>
+    <% } %>
+  </head>
+  <body>
+    <main></main>
+  </body>
+</html>
