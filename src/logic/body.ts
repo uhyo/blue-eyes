@@ -2,10 +2,11 @@ import { Monster } from "../data/Monster";
 import { RandFunction } from "./RandFunction";
 import { ovalEdge } from "./baseEdge";
 import { range } from "../util/range";
-import { distance } from "./distance";
+import { distance } from "./math/distance";
 import { boxMuller } from "./math/boxMuller";
 import { addPosition } from "./math/addPosition";
 import { Position } from "../data/Position";
+import { placeNumbers } from "./placeNumbers";
 
 export type MonsterBodyResult = {
   /**
@@ -37,7 +38,12 @@ export function decideMonsterBody(
   const { base, body, position } = monster;
   const result: MonsterBodyResult[] = [];
 
-  const angles = placeCellAngles(rand, (1 + body.cellNumber) >> 1);
+  const angles = placeNumbers(
+    rand,
+    (1 + body.cellNumber) >> 1,
+    2 * Math.PI,
+    0.1
+  );
   const baseCells: MonsterBodyResult[] = angles.map((angle) => {
     const cellCenter = ovalEdge(base, angle, position);
     const { xRadius, yRadius } = cellRadius(
@@ -73,22 +79,6 @@ export function decideMonsterBody(
     );
   }
   return [...baseCells, ...otherCells];
-}
-
-function placeCellAngles(rand: RandFunction, cellNumber: number) {
-  const angles: number[] = [];
-  let angle = 0;
-  for (const _ of range(1, cellNumber + 1)) {
-    angles.push(angle);
-    angle += Math.max(0.1, boxMuller(rand, 0.5, 0.05));
-  }
-  // normalize to 0 --- 2PI
-  const scale = (Math.PI * 2) / angles[angles.length - 1];
-  angles.pop();
-  for (let i = 0; i < angles.length; i++) {
-    angles[i] *= scale;
-  }
-  return angles;
 }
 
 function cellRadius(
@@ -132,7 +122,6 @@ function findNiceCell(
       penalty = pn;
     }
   }
-  console.log(penalty);
   return result!;
 }
 

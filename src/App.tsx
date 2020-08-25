@@ -19,7 +19,7 @@ const defaultMonster: Monster = {
   color: {
     body: "#ff0000",
     eye1: "#ffffff",
-    eye2: "#0000ff",
+    eye2: "#0180ff",
   },
 };
 

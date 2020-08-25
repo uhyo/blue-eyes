@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Monster } from "../data/Monster";
 import { decideMonsterBody } from "../logic/body";
+import { decideMonseterEyes } from "../logic/eyes";
 
 type Props = {
   monster: Monster;
@@ -30,6 +31,7 @@ function draw(ctx: CanvasRenderingContext2D, monster: Monster) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   const cells = decideMonsterBody(monster, Math.random);
+  const eyes = decideMonseterEyes(Math.random, cells);
 
   ctx.fillStyle = color.body;
   for (const cell of cells) {
@@ -46,10 +48,35 @@ function draw(ctx: CanvasRenderingContext2D, monster: Monster) {
     ctx.closePath();
     ctx.fill();
   }
-  for (const cell of cells) {
+
+  for (const eye of eyes) {
+    ctx.fillStyle = color.eye1;
+    ctx.beginPath();
+    ctx.ellipse(
+      eye.x,
+      eye.y,
+      eye.areaRadius,
+      eye.areaRadius,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  for (const eye of eyes) {
     ctx.fillStyle = color.eye2;
     ctx.beginPath();
-    ctx.ellipse(cell.x, cell.y, 5, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(
+      eye.x + eye.orbitRadius,
+      eye.y,
+      eye.eyeRadius,
+      eye.eyeRadius,
+      0,
+      0,
+      Math.PI * 2
+    );
     ctx.closePath();
     ctx.fill();
   }
