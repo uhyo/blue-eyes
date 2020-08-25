@@ -31,6 +31,7 @@ const main = css`
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  font-family: sans-serif;
 `;
 
 export const App: React.FC = () => {
