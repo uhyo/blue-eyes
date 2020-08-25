@@ -51,6 +51,18 @@ export const App: React.FC = () => {
         </small>
       </p>
       <p>
+        <small>
+          Made by{" "}
+          <a href="https://twitter.com/_uhyo" rel="external noopener">
+            @uhyo_
+          </a>{" "}
+          /{" "}
+          <a href="https://github.com/uhyo/blue-eyes" rel="external noopener">
+            GitHub
+          </a>
+        </small>
+      </p>
+      <p>
         <small>このサイトはGoogle Analyticsを使用しています。</small>
       </p>
     </div>
