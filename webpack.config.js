@@ -99,13 +99,9 @@ module.exports = (env, argv) => {
           ga: require("./scripts/googleAnalytics"),
         },
       }),
-      // new CopyWebpackPlugin({
-      //   patterns: [
-      //     "static/new.min.css",
-      //     "static/prism.min.js",
-      //     "static/prism.css",
-      //   ],
-      // }),
+      new CopyWebpackPlugin({
+        patterns: ["static/og-image.png"],
+      }),
       // new PwaManifest(require("./scripts/webManifest")),
       // new WorkboxPlugin.InjectManifest({
       //   swSrc: "./src/sw/index.ts",
