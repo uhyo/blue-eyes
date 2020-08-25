@@ -41,6 +41,18 @@ export const App: React.FC = () => {
       <h1>Logo Generator</h1>
       <DrawMonster monster={generated} color={monster.color} />
       <Control monster={monster} onUpdate={setMonster} />
+      <p>
+        <small>
+          このサイトは
+          <a href="https://www.expo2025.or.jp/" rel="external noopener">
+            2025年大阪・関西万博
+          </a>
+          を応援しています。
+        </small>
+      </p>
+      <p>
+        <small>このサイトはGoogle Analyticsを使用しています。</small>
+      </p>
     </div>
   );
 };
