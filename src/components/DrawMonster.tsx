@@ -6,6 +6,7 @@ import { decideMonseterEyes } from "../logic/eyes";
 import { MonsterGenerationResult } from "./useMonster";
 import { useMove } from "./useMove";
 import { moveFrame, MoveData } from "./moveFrame";
+import { useInput } from "./useInput";
 
 type Props = {
   monster: MonsterGenerationResult;
@@ -25,6 +26,7 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const move = useMove(monster);
+  const input = useInput(canvasRef);
 
   useEffect(() => {
     const ctx = bgRef.current?.getContext("2d");
@@ -46,7 +48,7 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
 
     let handle: number;
     const frame = () => {
-      moveFrame(monster, move);
+      moveFrame(monster, move, input);
       drawFrame(ctx, bgData, monster, color, move);
       handle = requestAnimationFrame(frame);
     };
