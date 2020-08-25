@@ -4,7 +4,8 @@ import { Monster, MonsterColor } from "../data/Monster";
 import { decideMonsterBody } from "../logic/body";
 import { decideMonseterEyes } from "../logic/eyes";
 import { MonsterGenerationResult } from "./useMonster";
-import { useMove, MoveData } from "./useMove";
+import { useMove } from "./useMove";
+import { moveFrame, MoveData } from "./moveFrame";
 
 type Props = {
   monster: MonsterGenerationResult;
@@ -45,6 +46,7 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
 
     let handle: number;
     const frame = () => {
+      moveFrame(monster, move);
       drawFrame(ctx, bgData, monster, color, move);
       handle = requestAnimationFrame(frame);
     };
