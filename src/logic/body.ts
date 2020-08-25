@@ -36,8 +36,6 @@ export function decideMonsterBody(
   monster: Monster
 ): MonsterBodyResult[] {
   const { base, body, position } = monster;
-  const result: MonsterBodyResult[] = [];
-
   const angles = placeNumbers(
     rand,
     (1 + body.cellNumber) >> 1,

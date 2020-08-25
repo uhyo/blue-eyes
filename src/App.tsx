@@ -6,7 +6,7 @@ import { css } from "linaria";
 import { Control } from "./components/Control";
 
 const defaultMonster: Monster = {
-  seed: 12345,
+  seed: 123,
   base: {
     xRadius: 100,
     yRadius: 130,

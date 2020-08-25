@@ -1,8 +1,6 @@
-declare module "xorshift" {
-  export type XorShift = {
-    random: () => number;
-  };
-  export const constructor: {
-    new (seed: [number, number, number, number]): XorShift;
-  };
+declare module "xorshift.js" {
+  export class XorShift128Plus {
+    constructor(seed: [number, number, number, number]);
+    random(): number;
+  }
 }

@@ -15,8 +15,6 @@ export function decideMonseterEyes(
   rand: RandFunction,
   cells: MonsterBodyResult[]
 ): MonsterEyesResult[] {
-  const result: MonsterEyesResult[] = [];
-
   const eyeNumber = Math.max(
     1,
     Math.min(cells.length, Math.round(boxMuller(rand, cells.length / 2, 1)))
