@@ -3,6 +3,7 @@ import { Monster } from "./data/Monster";
 import { DrawMonster } from "./components/DrawMonster";
 import { useMonster } from "./components/useMonster";
 import { css } from "linaria";
+import { Control } from "./components/Control";
 
 const defaultMonster: Monster = {
   seed: 12345,
@@ -15,8 +16,8 @@ const defaultMonster: Monster = {
     cellNumber: 12,
   },
   position: {
-    x: 200,
-    y: 200,
+    x: 300,
+    y: 300,
   },
   color: {
     body: "#ff0000",
@@ -33,11 +34,13 @@ const main = css`
 `;
 
 export const App: React.FC = () => {
-  const [monster] = useState<Monster>(defaultMonster);
+  const [monster, setMonster] = useState<Monster>(defaultMonster);
   const generated = useMonster(monster);
   return (
     <div className={main}>
+      <h1>Logo Generator</h1>
       <DrawMonster monster={generated} color={monster.color} />
+      <Control monster={monster} onUpdate={setMonster} />
     </div>
   );
 };

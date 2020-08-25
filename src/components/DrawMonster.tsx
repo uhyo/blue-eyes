@@ -17,6 +17,11 @@ const hiddenCanvas = css`
   display: none;
 `;
 
+const canvasCss = css`
+  max-width: 100vmin;
+  max-height: 100vmin;
+`;
+
 /**
  * Draw the monster.
  */
@@ -58,8 +63,8 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
 
   return (
     <Fragment>
-      <canvas className={hiddenCanvas} ref={bgRef} width="400" height="400" />
-      <canvas ref={canvasRef} width="400" height="400" />
+      <canvas className={hiddenCanvas} ref={bgRef} width="600" height="600" />
+      <canvas ref={canvasRef} className={canvasCss} width="600" height="600" />
     </Fragment>
   );
 };
