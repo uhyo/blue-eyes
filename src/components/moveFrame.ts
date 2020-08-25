@@ -86,6 +86,9 @@ export function moveFrame(
   } else if (move.eyeTarget) {
     if (move.eyeTarget.untilTime < now) {
       move.eyeTarget = undefined;
+      for (const eye of move.eyes) {
+        eye.destinationAngle = undefined;
+      }
     }
   }
 
