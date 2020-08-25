@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Monster } from "./data/Monster";
 import { DrawMonster } from "./components/DrawMonster";
 import { useMonster } from "./components/useMonster";
+import { css } from "linaria";
 
 const defaultMonster: Monster = {
   seed: 12345,
@@ -24,8 +25,19 @@ const defaultMonster: Monster = {
   },
 };
 
+const main = css`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const App: React.FC = () => {
   const [monster] = useState<Monster>(defaultMonster);
   const generated = useMonster(monster);
-  return <DrawMonster monster={generated} color={monster.color} />;
+  return (
+    <div className={main}>
+      <DrawMonster monster={generated} color={monster.color} />
+    </div>
+  );
 };

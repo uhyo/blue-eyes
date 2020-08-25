@@ -19,6 +19,7 @@ const hiddenCanvas = css`
  */
 export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
   const bgRef = useRef<HTMLCanvasElement>(null);
+  const bgDataRef = useRef<ImageData | undefined>(undefined);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const ctx = bgRef.current?.getContext("2d");
@@ -26,12 +27,12 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
       return;
     }
 
-    drawBg(ctx, color, monster);
+    bgDataRef.current = drawBg(ctx, color, monster);
   }, [monster, color]);
 
   useEffect(() => {
-    const bgCanvas = bgRef.current;
-    if (!bgCanvas) return;
+    const bgData = bgDataRef.current;
+    if (!bgData) return;
 
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) {
@@ -40,7 +41,7 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
 
     let handle: number;
     const frame = () => {
-      drawFrame(ctx, bgCanvas, monster, color);
+      drawFrame(ctx, bgData, monster, color);
       handle = requestAnimationFrame(frame);
     };
     handle = requestAnimationFrame(frame);
@@ -97,31 +98,17 @@ function drawBg(
     ctx.fill();
   }
 
-  // for (const eye of eyes) {
-  //   ctx.fillStyle = color.eye2;
-  //   ctx.beginPath();
-  //   ctx.ellipse(
-  //     eye.x + eye.orbitRadius,
-  //     eye.y,
-  //     eye.eyeRadius,
-  //     eye.eyeRadius,
-  //     0,
-  //     0,
-  //     Math.PI * 2
-  //   );
-  //   ctx.closePath();
-  //   ctx.fill();
-  // }
+  return ctx.getImageData(0, 0, canvas.width, canvas.height);
 }
 
 function drawFrame(
   ctx: CanvasRenderingContext2D,
-  bgCanvas: HTMLCanvasElement,
+  bgData: ImageData,
   monster: MonsterGenerationResult,
   color: MonsterColor
 ) {
   const { eyes } = monster;
-  ctx.drawImage(bgCanvas, 0, 0);
+  ctx.putImageData(bgData, 0, 0);
 
   for (const eye of eyes) {
     ctx.fillStyle = color.eye2;
