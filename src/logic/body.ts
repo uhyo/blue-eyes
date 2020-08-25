@@ -32,8 +32,8 @@ export type MonsterBodyResult = {
 };
 
 export function decideMonsterBody(
-  monster: Monster,
-  rand: RandFunction
+  rand: RandFunction,
+  monster: Monster
 ): MonsterBodyResult[] {
   const { base, body, position } = monster;
   const result: MonsterBodyResult[] = [];

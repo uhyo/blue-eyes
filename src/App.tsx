@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Monster } from "./data/Monster";
 import { DrawMonster } from "./components/DrawMonster";
+import { useMonster } from "./components/useMonster";
 
 const defaultMonster: Monster = {
   seed: 12345,
@@ -24,5 +25,7 @@ const defaultMonster: Monster = {
 };
 
 export const App: React.FC = () => {
-  return <DrawMonster monster={defaultMonster} />;
+  const [monster] = useState<Monster>(defaultMonster);
+  const generated = useMonster(monster);
+  return <DrawMonster monster={generated} color={monster.color} />;
 };

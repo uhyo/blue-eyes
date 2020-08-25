@@ -1,16 +1,18 @@
 import React, { useEffect, useRef } from "react";
-import { Monster } from "../data/Monster";
+import { Monster, MonsterColor } from "../data/Monster";
 import { decideMonsterBody } from "../logic/body";
 import { decideMonseterEyes } from "../logic/eyes";
+import { MonsterGenerationResult } from "./useMonster";
 
 type Props = {
-  monster: Monster;
+  monster: MonsterGenerationResult;
+  color: MonsterColor;
 };
 
 /**
  * Draw the monster.
  */
-export const DrawMonster: React.FC<Props> = ({ monster }) => {
+export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -18,20 +20,21 @@ export const DrawMonster: React.FC<Props> = ({ monster }) => {
       return;
     }
 
-    draw(ctx, monster);
+    draw(ctx, color, monster);
   }, [monster]);
 
   return <canvas ref={canvasRef} width="400" height="400"></canvas>;
 };
 
-function draw(ctx: CanvasRenderingContext2D, monster: Monster) {
-  const { color } = monster;
+function draw(
+  ctx: CanvasRenderingContext2D,
+  color: MonsterColor,
+  monster: MonsterGenerationResult
+) {
+  const { cells, eyes } = monster;
   const canvas = ctx.canvas;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const cells = decideMonsterBody(monster, Math.random);
-  const eyes = decideMonseterEyes(Math.random, cells);
 
   ctx.fillStyle = color.body;
   for (const cell of cells) {
