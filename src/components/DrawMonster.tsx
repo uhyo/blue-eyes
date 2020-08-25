@@ -4,6 +4,7 @@ import { Monster, MonsterColor } from "../data/Monster";
 import { decideMonsterBody } from "../logic/body";
 import { decideMonseterEyes } from "../logic/eyes";
 import { MonsterGenerationResult } from "./useMonster";
+import { useMove, MoveData } from "./useMove";
 
 type Props = {
   monster: MonsterGenerationResult;
@@ -21,6 +22,9 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
   const bgRef = useRef<HTMLCanvasElement>(null);
   const bgDataRef = useRef<ImageData | undefined>(undefined);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const move = useMove(monster);
+
   useEffect(() => {
     const ctx = bgRef.current?.getContext("2d");
     if (!ctx) {
@@ -41,7 +45,7 @@ export const DrawMonster: React.FC<Props> = ({ monster, color }) => {
 
     let handle: number;
     const frame = () => {
-      drawFrame(ctx, bgData, monster, color);
+      drawFrame(ctx, bgData, monster, color, move);
       handle = requestAnimationFrame(frame);
     };
     handle = requestAnimationFrame(frame);
@@ -105,17 +109,19 @@ function drawFrame(
   ctx: CanvasRenderingContext2D,
   bgData: ImageData,
   monster: MonsterGenerationResult,
-  color: MonsterColor
+  color: MonsterColor,
+  move: MoveData
 ) {
   const { eyes } = monster;
   ctx.putImageData(bgData, 0, 0);
 
-  for (const eye of eyes) {
+  for (const [i, eye] of eyes.entries()) {
+    const { angle } = move.eyes[i];
     ctx.fillStyle = color.eye2;
     ctx.beginPath();
     ctx.ellipse(
-      eye.x + eye.orbitRadius,
-      eye.y,
+      eye.x + Math.cos(angle) * eye.orbitRadius,
+      eye.y + Math.sin(angle) * eye.orbitRadius,
       eye.eyeRadius,
       eye.eyeRadius,
       0,
