@@ -10,3 +10,9 @@ export const inputCss = css`
   background-color: white;
   border: 1px solid #cccccc;
 `;
+
+export const buttonCss = css`
+  padding: 1px 2px;
+  background-color: white;
+  border: 1px solid #cccccc;
+`;

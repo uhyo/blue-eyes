@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { containerCss, inputCss } from "./style";
+import { containerCss, inputCss, buttonCss } from "./style";
 import { Monster } from "../../data/Monster";
 import { clamp } from "../../logic/math/clamp";
 
@@ -20,6 +20,15 @@ export const Control: React.FC<Props> = ({ monster, onUpdate }) => {
         seed: newSeed,
       });
     }
+  };
+
+  const onReload = () => {
+    const nextSeed = (Math.random() * 2 ** 32) >>> 0;
+    setSeedString(String(nextSeed));
+    onUpdate({
+      ...monster,
+      seed: nextSeed,
+    });
   };
 
   const onUpdateSize = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -123,7 +132,10 @@ export const Control: React.FC<Props> = ({ monster, onUpdate }) => {
           placeholder="12345"
           value={seedString}
           onChange={onUpdateSeed}
-        />
+        />{" "}
+        <button className={buttonCss} onClick={onReload}>
+          reload
+        </button>
       </div>
     </div>
   );
