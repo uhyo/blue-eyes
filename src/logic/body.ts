@@ -7,6 +7,7 @@ import { boxMuller } from "./math/boxMuller";
 import { addPosition } from "./math/addPosition";
 import { Position } from "../data/Position";
 import { placeNumbers } from "./placeNumbers";
+import { convertAngleToOvalAngle } from "./math/convertAngleToOvalAngle";
 
 export type MonsterBodyResult = {
   /**
@@ -43,7 +44,8 @@ export function decideMonsterBody(
     0.1
   );
   const baseCells: MonsterBodyResult[] = angles.map((angle) => {
-    const cellCenter = ovalEdge(base, angle, position);
+    const ovAngle = convertAngleToOvalAngle(angle, base.xRadius, base.yRadius);
+    const cellCenter = ovalEdge(base, ovAngle, position);
     const { xRadius, yRadius } = cellRadius(
       rand,
       monster,
@@ -66,9 +68,12 @@ export function decideMonsterBody(
     const centerPosX = (prevCell.x + nextCell.x) >> 1;
     const centerPosY = (prevCell.y + nextCell.y) >> 1;
 
-    const oAng =
+    const oAng = convertAngleToOvalAngle(
       Math.atan2(centerPosY - position.y, centerPosX - position.x) -
-      base.rotation;
+        base.rotation,
+      base.xRadius,
+      base.yRadius
+    );
     const rl = ovalEdge(base, oAng);
     const cellCenter = addPosition(rl, position);
 
