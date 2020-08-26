@@ -38,8 +38,8 @@ export function decideMonseterEyes(
       ) | 0;
     const orbitRadius =
       clamp(
-        0,
-        boxMuller(rand, (areaRadius - eyeRadius) / 2, 0.1),
+        eyeRadius / 8,
+        boxMuller(rand, areaRadius / 2 - eyeRadius / 6, eyeRadius / 3),
         areaRadius - eyeRadius
       ) | 0;
 
