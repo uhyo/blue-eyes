@@ -8,6 +8,7 @@ import { addPosition } from "./math/addPosition";
 import { Position } from "../data/Position";
 import { placeNumbers } from "./placeNumbers";
 import { convertAngleToOvalAngle } from "./math/convertAngleToOvalAngle";
+import { Oval } from "../data/Oval";
 
 export type MonsterBodyResult = {
   /**
@@ -39,10 +40,10 @@ export function decideMonsterBody(
   const { base, body, position } = monster;
   const angles = placeNumbers(
     rand,
-    (1 + body.cellNumber) >> 1,
+    (2 + body.cellNumber) >> 1,
     2 * Math.PI,
-    0.1
-  );
+    0.3
+  ).slice(1);
   const baseCells: MonsterBodyResult[] = angles.map((angle) => {
     const ovAngle = convertAngleToOvalAngle(angle, base.xRadius, base.yRadius);
     const cellCenter = ovalEdge(base, ovAngle, position);
@@ -50,7 +51,7 @@ export function decideMonsterBody(
       rand,
       monster,
       cellCenter.distance,
-      0.1
+      0.25
     );
     const rotation = rand() * Math.PI;
     return {
@@ -68,18 +69,11 @@ export function decideMonsterBody(
     const centerPosX = (prevCell.x + nextCell.x) >> 1;
     const centerPosY = (prevCell.y + nextCell.y) >> 1;
 
-    const oAng = convertAngleToOvalAngle(
+    const circleAng =
       Math.atan2(centerPosY - position.y, centerPosX - position.x) -
-        base.rotation,
-      base.xRadius,
-      base.yRadius
-    );
-    const rl = ovalEdge(base, oAng);
-    const cellCenter = addPosition(rl, position);
+      base.rotation;
 
-    otherCells.push(
-      findNiceCell(rand, monster, prevCell, nextCell, cellCenter)
-    );
+    otherCells.push(findNiceCell(rand, monster, prevCell, nextCell, circleAng));
   }
   return [...baseCells, ...otherCells];
 }
@@ -105,21 +99,37 @@ function findNiceCell(
   monster: Monster,
   prevCell: MonsterBodyResult,
   nextCell: MonsterBodyResult,
-  center: Position
+  baseCenterAngle: number
 ): MonsterBodyResult {
+  const { base, body, position } = monster;
   let result: MonsterBodyResult;
   let penalty = Infinity;
-  const cellDistance = distance(center, monster.position);
   for (let i = 0; i < 20; i++) {
-    const { xRadius, yRadius } = cellRadius(rand, monster, cellDistance, 0.25);
+    const centerAngle =
+      baseCenterAngle + boxMuller(rand, 0, Math.PI / (body.cellNumber * 2));
+    const oAng = convertAngleToOvalAngle(
+      centerAngle,
+      base.xRadius,
+      base.yRadius
+    );
+    const rl = ovalEdge(base, oAng);
+    const cellCenter = addPosition(rl, position);
+    const siblingDistance = Math.sqrt(
+      distance(prevCell, cellCenter) * distance(cellCenter, nextCell)
+    );
+    const xRadius = Math.max(5, siblingDistance * boxMuller(rand, 0.6, 0.1));
+    const yRadius = Math.max(5, siblingDistance * boxMuller(rand, 0.6, 0.1));
     const rotation = rand() * Math.PI;
     const res = {
-      ...center,
+      ...cellCenter,
       xRadius,
       yRadius,
       rotation,
     };
-    const pn = cellPenalty(prevCell, res) + cellPenalty(res, nextCell);
+    const pn =
+      cellSizePenalty(res) +
+      cellDistancePenalty(monster.base, prevCell, res) +
+      cellDistancePenalty(monster.base, res, nextCell);
     if (penalty > pn) {
       result = res;
       penalty = pn;
@@ -128,19 +138,36 @@ function findNiceCell(
   return result!;
 }
 
-function cellPenalty(cell1: MonsterBodyResult, cell2: MonsterBodyResult) {
+function cellDistancePenalty(
+  base: Oval,
+  cell1: MonsterBodyResult,
+  cell2: MonsterBodyResult
+) {
   const abstAngle = Math.atan2(cell2.y - cell1.y, cell2.x - cell2.y);
   // cell1 -> cell2
   const cell1Angle = abstAngle - cell1.rotation;
   // cell2 -> cell1
   const cell2Angle = abstAngle - cell2.rotation + Math.PI;
 
-  const cell1Edge = ovalEdge(cell1, cell1Angle);
-  const cell2Edge = ovalEdge(cell2, cell2Angle);
+  const cell1Edge = ovalEdge(
+    cell1,
+    convertAngleToOvalAngle(cell1Angle, cell1.xRadius, cell2.yRadius)
+  );
+  const cell2Edge = ovalEdge(
+    cell2,
+    convertAngleToOvalAngle(cell2Angle, cell2.xRadius, cell2.yRadius)
+  );
   const diff = cell1Edge.distance + cell2Edge.distance - distance(cell1, cell2);
   if (diff < 5) {
-    return 1000 - diff;
+    // diff is not enough, maybe not colliding
+    return (base.xRadius + base.yRadius) * 25 - diff;
   } else {
-    return diff;
+    // too close
+    return 5 * diff;
   }
+}
+
+function cellSizePenalty(cell: MonsterBodyResult) {
+  return 0.01 * (cell.xRadius + cell.yRadius);
+  // return 0;
 }
