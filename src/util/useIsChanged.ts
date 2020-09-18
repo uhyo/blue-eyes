@@ -1,8 +1,7 @@
 import { useRef } from "react";
+import { useLastValue } from "./useLastValue";
 
 export const useIsChanged = <T>(value: T) => {
-  const lastValueRef = useRef<T | undefined>(undefined);
-  const result = lastValueRef.current !== value;
-  lastValueRef.current = value;
-  return result;
+  const lastValue = useLastValue(value);
+  return lastValue !== value;
 };

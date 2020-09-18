@@ -38,11 +38,18 @@ export type InputData = {
   };
 };
 
-export const initMove = (monster: MonsterGenerationResult): MoveData => {
-  const eyes = monster.eyes.map(() => ({
-    angle: Math.random() * 2 * Math.PI,
-    power: 0,
-  }));
+export const initMove = (
+  monster: MonsterGenerationResult,
+  lastMonster: MonsterGenerationResult | undefined,
+  previous: MoveData | undefined
+): MoveData => {
+  const eyes =
+    !previous || !lastMonster || monster.eyes.length !== lastMonster.eyes.length
+      ? monster.eyes.map(() => ({
+          angle: Math.random() * 2 * Math.PI,
+          power: 0,
+        }))
+      : previous.eyes;
   const log = {
     mouse: [],
   };
