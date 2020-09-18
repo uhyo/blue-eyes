@@ -46,7 +46,7 @@ export function decideMonsterBody(
   ).slice(1);
   const baseCells: MonsterBodyResult[] = angles.map((angle) => {
     const ovAngle = convertAngleToOvalAngle(angle, base.xRadius, base.yRadius);
-    const cellCenter = ovalEdge(base, ovAngle, position);
+    const cellCenter = ovalEdge(base, ovAngle + monster.cycle, position);
     const { xRadius, yRadius } = cellRadius(
       rand,
       monster,

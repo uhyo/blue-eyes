@@ -24,6 +24,10 @@ export type Monster = {
    */
   base: Oval;
   /**
+   * Start of cells
+   */
+  cycle: number;
+  /**
    * Body Data
    */
   body: MonsterBody;

@@ -51,6 +51,13 @@ export const Control: React.FC<Props> = ({ monster, onUpdate }) => {
     });
   };
 
+  const onUpdateCycle = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    onUpdate({
+      ...monster,
+      cycle: (Number(e.currentTarget.value) * Math.PI) / 180 || 0,
+    });
+  };
+
   const onUpdateWidth = (e: React.SyntheticEvent<HTMLInputElement>) => {
     onUpdate({
       ...monster,
@@ -98,6 +105,20 @@ export const Control: React.FC<Props> = ({ monster, onUpdate }) => {
             clamp(0, Math.ceil((monster.base.rotation * 180) / Math.PI), 359)
           )}
           onChange={onUpdateRotation}
+        />
+      </div>
+      <div>
+        Cycle:{" "}
+        <input
+          className={inputCss}
+          type="range"
+          min="0"
+          max="359"
+          step="1"
+          value={String(
+            clamp(0, Math.ceil((monster.cycle * 180) / Math.PI), 359)
+          )}
+          onChange={onUpdateCycle}
         />
       </div>
       <div>

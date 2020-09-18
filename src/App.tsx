@@ -15,6 +15,7 @@ const defaultMonster: Monster = {
   body: {
     cellNumber: 12,
   },
+  cycle: 0,
   position: {
     x: 300,
     y: 300,
